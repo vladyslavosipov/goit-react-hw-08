@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types"; 
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
 import css from "./RestrictedRoute.module.css";
 
@@ -14,6 +15,11 @@ const RestrictedRoute = ({ children }) => {
   ) : (
     children
   );
+};
+
+
+RestrictedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default RestrictedRoute;

@@ -8,9 +8,10 @@ import RestrictedRoute from "./components/RestrictedRoute/RestrictedRoute";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Navigation from "./components/Navigation/Navigation";
 
+
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
-const LoginPage = lazy(() => import("./pages/LogInPage/LogInPage"));
+const LogInPage = lazy(() => import("./pages/LogInPage/LogInPage"));
 const ContactsPage = lazy(() => import("./pages/ContactsPage/ContactsPage"));
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
             path="/login"
             element={
               <RestrictedRoute>
-                <LoginPage />
+                <LogInPage />
               </RestrictedRoute>
             }
           />
