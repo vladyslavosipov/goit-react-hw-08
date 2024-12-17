@@ -1,54 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { fetchContacts, addContact, deleteContact } from "./operations";
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchContacts, addContact, deleteContact } from './operations';
+import { logOut } from '../auth/operations';
 
 const contactsSlice = createSlice({
-  name: "contacts",
+  name: 'contacts',
   initialState: {
     items: [],
-    loading: false,
+    isLoading: false,
     error: null,
-    filter: "",
-  },
-  reducers: {
-    setFilter(state, action) {
-      state.filter = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
-      .addCase(fetchContacts.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.items = payload;
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.items = action.payload;
       })
-      .addCase(fetchContacts.rejected, (state, { payload }) => {
-        state.loading = false;
-        state.error = payload;
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       })
-      .addCase(addContact.fulfilled, (state, { payload }) => {
-        state.items.push(payload);
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.items.push(action.payload);
       })
-      .addCase(deleteContact.fulfilled, (state, { payload }) => {
-        state.items = state.items.filter((contact) => contact.id !== payload);
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.items = state.items.filter((item) => item.id !== action.payload.id);
+      })
+      .addCase(logOut.fulfilled, (state) => {
+        state.items = [];
+        state.isLoading = false;
+        state.error = null;
       });
   },
 });
-
-export const selectAllContacts = (state) => state.contacts.items;
-export const selectNameFilter = (state) => state.contacts.filter;
-
-export const selectFilteredContacts = (state) => {
-  const filter = state.contacts.filter.toLowerCase();
-  return state.contacts.items.filter((contact) =>
-    contact.name.toLowerCase().includes(filter)
-  );
-};
-
-export const selectContactsLoading = (state) => state.contacts.loading;
-export const selectContactsError = (state) => state.contacts.error;
-
-export const { setFilter } = contactsSlice.actions;
 
 export default contactsSlice.reducer;
